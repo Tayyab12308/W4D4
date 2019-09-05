@@ -5,11 +5,11 @@ class BandsController < ApplicationController
 
   def create
     @band = Band.new(band_params)
-    if @band.save!
+    if @band.save
       redirect_to bands_url
     else
       flash.now[:errors] = @band.errors.full_messages
-      render :new_bands_url
+      render :new
     end
   end
 
@@ -26,11 +26,11 @@ class BandsController < ApplicationController
   end
 
   def update
-    band = Band.find(params[:id])
-    if band.update(band_params)
+    @band = Band.find(params[:id])
+    if @band.update(band_params)
       render :show
     else
-      flash.now[:messages] = band.errors.full_messages
+      flash.now[:messages] = @band.errors.full_messages
     end
   end
 
@@ -38,7 +38,7 @@ class BandsController < ApplicationController
     band = Band.find(params[:id])
     if band
       band.destroy
-      render :index
+      redirect_to bands_url
     else
       flash[:messages] = [ "Unable to delete" ]
     end
